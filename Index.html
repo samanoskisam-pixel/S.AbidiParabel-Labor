@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Parabel-Labor: Was macht a?</title>
+<style>
+:root{
+  --bg:#f4f6f8; --panel:#ffffff; --ink:#18212b; --muted:#5b6673; --line:#d9dfe6;
+  --grid:#e6eaef; --axis:#7a8794; --f:#d6336c; --g:#6b7785; --ok:#1f8a4c; --pt:#e8890c; --btn:#eef1f5; --btn-h:#e1e6ec;
+  color-scheme:light;
+  box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#10151b; --panel:#18202a; --ink:#e8edf2; --muted:#9aa6b2; --line:#2b3643;
+    --grid:#222c37; --axis:#7d8a97; --f:#ff6b9a; --g:#8e9aa8; --ok:#4cc77f; --pt:#ffb04a; --btn:#222c37; --btn-h:#2c3946;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#10151b; --panel:#18202a; --ink:#e8edf2; --muted:#9aa6b2; --line:#2b3643;
+  --grid:#222c37; --axis:#7d8a97; --f:#ff6b9a; --g:#8e9aa8; --ok:#4cc77f; --pt:#ffb04a; --btn:#222c37; --btn-h:#2c3946;
+  color-scheme:dark;
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.wrap{max-width:1080px;margin:0 auto;padding:20px 16px 40px}
+h1{font-size:1.6rem;line-height:1.2;margin:0 0 4px}
+.sub{color:var(--muted);margin:0 0 18px;max-width:60ch}
+.grid{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:16px;align-items:start}
+@media (max-width:820px){.grid{grid-template-columns:1fr}}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+.card+.card{margin-top:14px}
+h2{font-size:1.02rem;margin:0 0 8px}
+svg{width:100%;height:auto;display:block}
+.term{font-size:1.5rem;font-weight:650;margin:0 0 2px;font-variant-numeric:tabular-nums}
+.term span{color:var(--f)}
+.status{color:var(--muted);margin:0 0 10px;min-height:3em}
+input[type=range]{width:100%;accent-color:var(--f);height:32px}
+.row{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0}
+button,.chip{font:inherit;color:var(--ink);background:var(--btn);border:1px solid var(--line);border-radius:8px;padding:6px 11px;cursor:pointer}
+button:hover{background:var(--btn-h)}
+button:focus-visible,input:focus-visible,summary:focus-visible{outline:3px solid var(--f);outline-offset:2px}
+button[aria-pressed="true"]{border-color:var(--f);box-shadow:inset 0 0 0 1px var(--f)}
+label{display:flex;align-items:center;gap:8px;margin:4px 0}
+.hit{font-weight:600;color:var(--ok);min-height:1.5em;margin:6px 0 0}
+ol{margin:6px 0 0;padding-left:20px}
+li{margin:6px 0}
+details{margin-top:4px;color:var(--muted)}
+summary{cursor:pointer}
+.sol{color:var(--ink);margin:4px 0 0}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Parabel-Labor: Was macht a?</h1>
+  <p class="sub">Verändere a und beobachte f(x) = a · x². Die graue Linie ist die Normalparabel g(x) = x².</p>
+
+  <div class="grid">
+    <div class="card">
+      <svg id="plot" viewBox="0 0 560 560" role="img" aria-label="Koordinatensystem mit der Parabel f(x) = a mal x Quadrat und der Normalparabel"></svg>
+    </div>
+
+    <div>
+      <div class="card">
+        <p class="term" id="term" aria-live="polite">f(x) = <span>1,0</span> · x²</p>
+        <p class="status" id="status" aria-live="polite"></p>
+        <label for="a"><strong>a</strong> <span id="aval">1,0</span></label>
+        <input type="range" id="a" min="-5" max="5" step="0.1" value="1">
+        <div class="row" id="quick" aria-label="Schnellauswahl für a"></div>
+        <label><input type="checkbox" id="showg" checked> Normalparabel g(x) = x² zeigen</label>
+      </div>
+
+      <div class="card">
+        <h2>Teil C: Finde a für einen Punkt</h2>
+        <div class="row" id="pts"></div>
+        <p class="hit" id="hit" aria-live="polite"></p>
+      </div>
+
+      <div class="card">
+        <h2>Teil B: Beobachtungsaufträge</h2>
+        <ol>
+          <li>Stelle a auf 3, dann auf 0,2. Was passiert mit der Öffnung der Parabel?
+            <details><summary>Lösung zeigen</summary><p class="sol">Bei a = 3 ist sie enger, bei a = 0,2 weiter als die Normalparabel.</p></details></li>
+          <li>Welche Werte von a drehen die Parabel nach unten?
+            <details><summary>Lösung zeigen</summary><p class="sol">Alle negativen Werte: a &lt; 0.</p></details></li>
+          <li>Bei welchem a liegt f genau auf g? Bei welchem ist f ein Spiegelbild von g?
+            <details><summary>Lösung zeigen</summary><p class="sol">a = 1 liegt auf g, a = −1 ist das Spiegelbild an der x-Achse.</p></details></li>
+          <li>Stelle a auf 0. Was siehst du? Wo liegt der Scheitelpunkt bei jedem a?
+            <details><summary>Lösung zeigen</summary><p class="sol">Bei a = 0 entsteht die x-Achse (eine Gerade). Der Scheitelpunkt liegt immer bei (0 | 0).</p></details></li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var W=560,H=560,P=38,XMIN=-4,XMAX=4,YMIN=-14,YMAX=14;
+  var svg=document.getElementById('plot');
+  function sx(x){return P+(x-XMIN)/(XMAX-XMIN)*(W-2*P)}
+  function sy(y){return H-P-(y-YMIN)/(YMAX-YMIN)*(H-2*P)}
+  function fmt(v){return (Math.round(v*100)/100).toString().replace('.',',')}
+  var s='<defs><clipPath id="clip"><rect x="'+P+'" y="'+P+'" width="'+(W-2*P)+'" height="'+(H-2*P)+'"/></clipPath></defs>';
+  var i;
+  for(i=XMIN;i<=XMAX;i++){
+    s+='<line x1="'+sx(i)+'" y1="'+sy(YMIN)+'" x2="'+sx(i)+'" y2="'+sy(YMAX)+'" stroke="var(--grid)"/>';
+    if(i!==0) s+='<text x="'+sx(i)+'" y="'+(sy(0)+16)+'" font-size="12" text-anchor="middle" fill="var(--muted)">'+i+'</text>';
+  }
+  for(i=YMIN;i<=YMAX;i+=2){
+    s+='<line x1="'+sx(XMIN)+'" y1="'+sy(i)+'" x2="'+sx(XMAX)+'" y2="'+sy(i)+'" stroke="var(--grid)"/>';
+    if(i!==0) s+='<text x="'+(sx(0)-6)+'" y="'+(sy(i)+4)+'" font-size="12" text-anchor="end" fill="var(--muted)">'+i+'</text>';
+  }
+  s+='<line x1="'+sx(XMIN)+'" y1="'+sy(0)+'" x2="'+sx(XMAX)+'" y2="'+sy(0)+'" stroke="var(--axis)" stroke-width="1.5"/>';
+  s+='<line x1="'+sx(0)+'" y1="'+sy(YMIN)+'" x2="'+sx(0)+'" y2="'+sy(YMAX)+'" stroke="var(--axis)" stroke-width="1.5"/>';
+  s+='<g clip-path="url(#clip)"><path id="pg" fill="none" stroke="var(--g)" stroke-width="2.5" stroke-dasharray="6 5"/><path id="pf" fill="none" stroke="var(--f)" stroke-width="3.5"/></g>';
+  s+='<circle cx="'+sx(0)+'" cy="'+sy(0)+'" r="4.5" fill="var(--ink)"/>';
+  s+='<g id="pt" style="display:none"><circle id="ptc" r="7" fill="var(--pt)" stroke="var(--panel)" stroke-width="2"/><text id="ptt" font-size="13" font-weight="600" fill="var(--ink)"></text></g>';
+  svg.innerHTML=s;
+
+  function pathFor(fn){
+    var d='',x,first=true;
+    for(x=XMIN;x<=XMAX+1e-9;x+=0.05){
+      d+=(first?'M':'L')+sx(x).toFixed(1)+' '+sy(fn(x)).toFixed(1)+' ';first=false;
+    }
+    return d;
+  }
+  document.getElementById('pg').setAttribute('d',pathFor(function(x){return x*x}));
+
+  var a=1,sel=null;
+  var points=[{n:'A',x:2,y:12},{n:'B',x:-1,y:-2},{n:'C',x:3,y:4.5}];
+  var slider=document.getElementById('a');
+
+  function update(){
+    document.getElementById('pf').setAttribute('d',pathFor(function(x){return a*x*x}));
+    document.getElementById('aval').textContent=fmt(a);
+    document.getElementById('term').innerHTML='f(x) = <span>'+a.toFixed(1).replace('.',',').replace('-','−')+'</span> · x²';
+    var st;
+    if(Math.abs(a)<1e-9){st='a = 0: Der Graph ist die x-Achse, also eine Gerade und keine Parabel.';}
+    else{
+      st=(a>0?'Nach oben geöffnet. ':'Nach unten geöffnet. ');
+      var m=Math.abs(a);
+      if(Math.abs(m-1)<1e-9) st+=(a>0?'Genau die Normalparabel.':'Spiegelbild der Normalparabel an der x-Achse.');
+      else st+=(m>1?'Enger (gestreckt) als die Normalparabel.':'Weiter (gestaucht) als die Normalparabel.');
+    }
+    document.getElementById('status').textContent=st;
+    var hit=document.getElementById('hit'),pt=document.getElementById('pt');
+    if(sel===null){pt.style.display='none';hit.textContent='';return;}
+    var p=points[sel];
+    pt.style.display='';
+    var c=document.getElementById('ptc'),t=document.getElementById('ptt');
+    c.setAttribute('cx',sx(p.x));c.setAttribute('cy',sy(p.y));
+    t.setAttribute('x',sx(p.x)+11);t.setAttribute('y',sy(p.y)-9);
+    t.textContent=p.n+'('+fmt(p.x)+' | '+fmt(p.y)+')';
+    var ok=Math.abs(a*p.x*p.x-p.y)<0.05;
+    c.setAttribute('fill',ok?'var(--ok)':'var(--pt)');
+    hit.textContent=ok?'Treffer! Kontrolle: '+fmt(p.y)+' = '+fmt(a)+' · '+fmt(p.x)+'². Rechne nach, warum das stimmt.':'Noch kein Treffer. Schätze zuerst, ob a positiv oder negativ sein muss.';
+  }
+
+  slider.addEventListener('input',function(){a=Math.round(parseFloat(slider.value)*10)/10;update();});
+
+  var quick=document.getElementById('quick');
+  [1,2,0.5,-1,-2,0].forEach(function(v){
+    var b=document.createElement('button');b.type='button';b.textContent='a = '+fmt(v).replace('-','−');
+    b.addEventListener('click',function(){a=v;slider.value=v;update();});
+    quick.appendChild(b);
+  });
+
+  var pts=document.getElementById('pts');
+  function mk(label,idx){
+    var b=document.createElement('button');b.type='button';b.textContent=label;b.setAttribute('aria-pressed',idx===null?'true':'false');b.dataset.i=idx===null?'':idx;
+    b.addEventListener('click',function(){
+      sel=idx;
+      Array.prototype.forEach.call(pts.children,function(o){o.setAttribute('aria-pressed',o===b?'true':'false');});
+      update();
+    });
+    pts.appendChild(b);
+  }
+  mk('Kein Punkt',null);
+  points.forEach(function(p,i){mk('Punkt '+p.n+' ('+fmt(p.x)+' | '+fmt(p.y)+')',i);});
+
+  var showg=document.getElementById('showg');
+  showg.addEventListener('change',function(){document.getElementById('pg').style.display=showg.checked?'':'none';});
+
+  update();
+})();
+</script>
+</body>
+</html>
